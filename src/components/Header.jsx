@@ -10,7 +10,7 @@ function Header() {
       </h1>
       <nav>
       <div>
-          <Link to="/">Home</Link>
+          <Link to="/home">Home</Link>
         </div>
         <div>
           <Link to="/cadastro">Cadastro</Link>
@@ -22,6 +22,9 @@ function Header() {
           <Link to="/despesa">Despesas</Link>
           <div>
             <Link to="/extrato">Extrato</Link>
+          </div>
+          <div>
+            <Link to="/">Sair</Link>
           </div>
         </div>
       </nav>
