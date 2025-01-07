@@ -3,7 +3,7 @@ import Header from "../../components/header"
 function Home(){
     return(
         <>
-        <Header/>
+  <Header/>
         <h1>Dashboard</h1>
 
         <div>
