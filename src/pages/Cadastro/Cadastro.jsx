@@ -1,4 +1,4 @@
-import Header from "../../components/header";
+import Header from "../../components/header"
 import { useState } from "react";
 
 function Cadastro() {
@@ -27,7 +27,7 @@ function Cadastro() {
 
     return (
         <>
-            <Header />
+            <Header/>
             <h1>Cadastro</h1>
             <div>
                 <form onSubmit={handleSubmit}>
