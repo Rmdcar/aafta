@@ -1,4 +1,6 @@
 import Header from "../../components/header"
+
+
 function Extrato(){
     return(
         <>
