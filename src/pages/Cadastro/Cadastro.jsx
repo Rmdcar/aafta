@@ -1,4 +1,5 @@
-import Header from "../../components/header"
+import Header from '../../components/Header.jsx'
+
 import { useState } from "react";
 
 function Cadastro() {
