@@ -39,13 +39,7 @@ function Login() {
         const expirationTime = new Date().getTime() + 1000 * 60 * 30 // 30 minutos
         sessionStorage.setItem('tokenExpiration', expirationTime);
         navigate('/home')
-        FlickerAlerts.showAlert({
-          type: "success",
-          title: "Sucesso!",
-          message: "Usuário logado!!!",
-          position: "top-right",
-          duration: 5000,
-        });
+
       }
       setFormData({ email: "", password: "" });
     } catch (error) {
