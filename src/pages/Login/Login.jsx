@@ -57,7 +57,7 @@ function Login() {
       setFormData({ email: "", password: "" });
     } catch (error) {
       console.error("Erro ao fazer login:", error); // Log do erro
-      setErrorMessage("Ocorreu um erro ao tentar fazer login. Tente novamente."); // Armazena a mensagem de erro
+      setErrorMessage(`${error} Ocorreu um erro ao tentar fazer login. Tente novamente.`); // Armazena a mensagem de erro
       setFormData({ email: "", password: "" });
     }
   };
