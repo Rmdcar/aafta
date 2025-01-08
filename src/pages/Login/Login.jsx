@@ -9,7 +9,7 @@ function Login() {
     email: "",
     password: "",
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Função para atualizar o estado com os valores do formulário
   const handleChange = (ev) => {
@@ -23,23 +23,26 @@ function Login() {
   // Função para tratar o envio do formulário
   const handleSubmit = async (ev) => {
     ev.preventDefault();
+    console.log("Dados do formulário:", formData); // Log dos dados do formulário
 
     try {
       const res = await Api.post("/login", formData);
+      console.log("Resposta da API:", res.data); // Log da resposta da API
+
       if (res.data.error === true) {
         FlickerAlerts.showAlert({
           type: "danger",
           title: "Erro!",
-          message: "Credenciais invalidas",
+          message: "Credenciais inválidas",
           position: "top-right",
           duration: 5000,
         });
       } else {
-        sessionStorage.setItem('token', res.data.token)
-        sessionStorage.setItem('usuario', res.data.usuario)
-        const expirationTime = new Date().getTime() + 1000 * 60 * 30 // 30 minutos
+        sessionStorage.setItem('token', res.data.token);
+        sessionStorage.setItem('usuario', res.data.usuario);
+        const expirationTime = new Date().getTime() + 1000 * 60 * 30; // 30 minutos
         sessionStorage.setItem('tokenExpiration', expirationTime);
-        navigate('/home')
+        navigate('/home');
         FlickerAlerts.showAlert({
           type: "success",
           title: "Sucesso!",
@@ -50,7 +53,7 @@ function Login() {
       }
       setFormData({ email: "", password: "" });
     } catch (error) {
-      console.log(error);
+      console.error("Erro ao fazer login:", error); // Log do erro
       setFormData({ email: "", password: "" });
     }
   };
@@ -59,7 +62,7 @@ function Login() {
     <>
       <div className={styles.title}>
         <h1>
-          ASSOCIACAO DOS AUDITORES FISCAIS DE TRIBUTOS MUNICIPAIS DE ANAPOLIS - AAFTA
+          ASSOCIAÇÃO DOS AUDITORES FISCAIS DE TRIBUTOS MUNICIPAIS DE ANÁPOLIS - AAFTA
         </h1>
       </div>
 
