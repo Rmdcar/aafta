@@ -25,11 +25,11 @@ function Login() {
   // Função para tratar o envio do formulário
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-    console.log("Dados do formulário:", formData); // Log dos dados do formulário
+    
 
     try {
       const res = await Api.post("/login", formData);
-      console.log("Resposta da API:", res.data); // Log da resposta da API
+      
 
       if (res.data.error === true) {
         setErrorMessage("Credenciais inválidas"); // Armazena a mensagem de erro
