@@ -56,6 +56,10 @@ button {
 button:hover {
     background-color: rgb(15, 17, 120); /* Cor ao passar o mouse */
 }
+.error {
+    color: red; /* Cor da mensagem de erro */
+    margin-top: 10px; /* Espaçamento acima da mensagem */
+  }
 
 @media (max-width: 768px) {
     h1 {

@@ -9,6 +9,7 @@ function Login() {
     email: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState(""); // Estado para armazenar a mensagem de erro
   const navigate = useNavigate();
 
   // Função para atualizar o estado com os valores do formulário
@@ -18,6 +19,7 @@ function Login() {
       ...formData,
       [name]: value,
     });
+    setErrorMessage(""); // Limpa a mensagem de erro ao digitar
   };
 
   // Função para tratar o envio do formulário
@@ -30,6 +32,7 @@ function Login() {
       console.log("Resposta da API:", res.data); // Log da resposta da API
 
       if (res.data.error === true) {
+        setErrorMessage("Credenciais inválidas"); // Armazena a mensagem de erro
         FlickerAlerts.showAlert({
           type: "danger",
           title: "Erro!",
@@ -54,6 +57,7 @@ function Login() {
       setFormData({ email: "", password: "" });
     } catch (error) {
       console.error("Erro ao fazer login:", error); // Log do erro
+      setErrorMessage("Ocorreu um erro ao tentar fazer login. Tente novamente."); // Armazena a mensagem de erro
       setFormData({ email: "", password: "" });
     }
   };
@@ -92,6 +96,7 @@ function Login() {
           </label>
           <button type="submit">Logar</button>
         </form>
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>} {/* Renderiza a mensagem de erro */}
       </div>
     </>
   );
