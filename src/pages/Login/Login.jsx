@@ -2,6 +2,7 @@ import Api from "../../services/Api.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FlickerAlerts } from "flicker-alerts";
+import styles from "./styles.module.css";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -26,14 +27,26 @@ function Login() {
     try {
       const res = await Api.post("/login", formData);
       if (res.data.error === true) {
-    
+        FlickerAlerts.showAlert({
+          type: "danger",
+          title: "Erro!",
+          message: "Credenciais invalidas",
+          position: "top-right",
+          duration: 5000,
+        });
       } else {
         sessionStorage.setItem('token', res.data.token)
         sessionStorage.setItem('usuario', res.data.usuario)
         const expirationTime = new Date().getTime() + 1000 * 60 * 30 // 30 minutos
         sessionStorage.setItem('tokenExpiration', expirationTime);
         navigate('/home')
-
+        FlickerAlerts.showAlert({
+          type: "success",
+          title: "Sucesso!",
+          message: "Usuário logado!!!",
+          position: "top-right",
+          duration: 5000,
+        });
       }
       setFormData({ email: "", password: "" });
     } catch (error) {
@@ -44,7 +57,7 @@ function Login() {
 
   return (
     <>
-      <div>
+      <div className={styles.title}>
         <h1>
           ASSOCIACAO DOS AUDITORES FISCAIS DE TRIBUTOS MUNICIPAIS DE ANAPOLIS - AAFTA
         </h1>

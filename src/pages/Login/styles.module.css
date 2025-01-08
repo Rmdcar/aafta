@@ -1,0 +1,72 @@
+.title {
+    font-family: Poppins, sans-serif;
+    text-align: center;
+    margin: 20px 0;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: rgb(23, 25, 179);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 400px; /* Limita a largura do formulário */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9; /* Cor de fundo do formulário */
+}
+
+label {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+input:focus {
+    border-color: rgb(23, 25, 179);
+    outline: none; /* Remove o contorno padrão */
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: rgb(23, 25, 179);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: rgb(15, 17, 120); /* Cor ao passar o mouse */
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem; /* Ajusta o tamanho do título em telas menores */
+    }
+
+    form {
+        padding: 15px; /* Ajusta o padding do formulário em telas menores */
+    }
+
+    button {
+        font-size: 1rem; /* Ajusta o tamanho do botão em telas menores */
+    }
+}
