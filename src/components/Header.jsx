@@ -20,14 +20,15 @@ function Header() {
   return (
     <>
       <h1 className={styles.title}>
-        ASSOCIACAO DOS AUDITORES FISCAIS DE TRIBUTOS MUNICIPAIS DE ANAPOLIS -
-        AAFTA
+        ASSOCIACAO DOS AUDITORES FISCAIS <br /> DE TRIBUTOS MUNICIPAIS DE ANAPOLIS - AAFTA
       </h1>
       <div className={styles.hamburgerMenu} onClick={toggleMenu}>
         <div></div>
         <div></div>
         <div></div>
+        
       </div>
+
       <nav className={`${styles.navbar} ${menuActive ? styles.active : ""}`}>
         <div className={styles.links}>
           <Link to="/home">Home</Link>

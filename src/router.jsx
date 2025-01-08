@@ -5,6 +5,7 @@ import Receita from "./pages/Receitas/Receita";
 import Despesa from "./pages/Despesas/Despesa";
 import Extrato from "./pages/Extrato/Extrato";
 import Login from "./pages/Login/Login";
+import Erro from "./pages/Erro/Erro";
 
 // Função para verificar se o usuário está autenticado
 const isAuthenticated = () => {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/extrato",
     element: <ProtectedRoute element={<Extrato />} />,
+  },
+  {
+    path: "/*",
+    element: <Erro/>,
   }
 ]);
 

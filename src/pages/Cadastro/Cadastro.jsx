@@ -2,6 +2,7 @@ import Header from '../../components/Header.jsx';
 import Api from '../../services/Api.js';
 import { useState } from "react";
 import { FlickerAlerts } from 'flicker-alerts';
+import styles from "./styles.module.css";
 
 function Cadastro() {
 

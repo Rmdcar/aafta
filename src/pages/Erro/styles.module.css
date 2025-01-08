@@ -1,0 +1,26 @@
+.mensagem{
+    display: flex;
+    flex-direction: column;
+    height: 50vh;
+    justify-content: center;
+}
+
+.links {
+    font-weight: 500;
+    font-size: 3vh;
+    padding: 3vh;
+    background-color: rgb(23, 25, 179);
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    width: 20vh;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    
+  }
+  
+  .links a {
+    color: white;
+    text-decoration: none;
+  }
