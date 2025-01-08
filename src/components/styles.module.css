@@ -29,13 +29,13 @@
     text-decoration: none;
   }
   
-  .hamburger-menu {
+  .hamburgerMenu {
     display: none;
     flex-direction: column;
     cursor: pointer;
   }
   
-  .hamburger-menu div {
+  .hamburgerMenu div {
     width: 25px;
     height: 3px;
     background-color: black;
@@ -52,7 +52,7 @@
       display: flex;
     }
   
-    .hamburger-menu {
+    .hamburgerMenu {
       display: flex;
     }
   }

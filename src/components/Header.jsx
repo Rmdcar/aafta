@@ -6,7 +6,6 @@ const handleLogout = (navigate) => {
   sessionStorage.removeItem("token");
   sessionStorage.removeItem("usuario");
   sessionStorage.removeItem("tokenExpiration");
-  console.log(sessionStorage.token);
   navigate("/");
 };
 
