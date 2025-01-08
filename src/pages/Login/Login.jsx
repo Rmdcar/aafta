@@ -26,13 +26,7 @@ function Login() {
     try {
       const res = await Api.post("/login", formData);
       if (res.data.error === true) {
-        FlickerAlerts.showAlert({
-          type: "danger",
-          title: "Erro!",
-          message: "Credenciais invalidas",
-          position: "top-right",
-          duration: 5000,
-        });
+    
       } else {
         sessionStorage.setItem('token', res.data.token)
         sessionStorage.setItem('usuario', res.data.usuario)
