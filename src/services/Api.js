@@ -1,9 +1,9 @@
 import axios from "axios";
 
-export const urlApi = 'https://localhost:3000/';
+export const urlApi = 'https://aafta-backend.vercel.app/';
 
 const Api = axios.create({
-  baseURL: 'https://localhost:3000/',
+  baseURL: 'https://aafta-backend.vercel.app/',
   headers:{
   'Content-Type': 'application/json'
   }
