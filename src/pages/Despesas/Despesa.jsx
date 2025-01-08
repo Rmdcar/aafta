@@ -1,14 +1,15 @@
 import Header from '../../components/Header.jsx'
-
+import Api from '../../services/Api.js';
 import { useState } from "react";
+import { FlickerAlerts , FlickerModals } from 'flicker-alerts';
 
 function Despesa(){
     const [formData, setFormData] = useState({
         categoria: '',
-        descricao: '',
+        descrição: '',
         mes: '' , 
         ano: '' ,
-        data: ''     
+        dataPagamento: ''     
     });
 
     // Função para atualizar o estado com os valores do formulário
@@ -21,10 +22,47 @@ function Despesa(){
     };
 
     // Função para tratar o envio do formulário
-    const handleSubmit = (ev) => {
+    const handleSubmit = async (ev) => {
         ev.preventDefault();
         console.log(formData);
-        setFormData({ categoria: '', descricao: '', mes: '', ano: '', data: ''});
+        try {
+          const res = await Api.post('/newespense', formData);
+          if (res.data.error === true) {
+              FlickerAlerts.showAlert({
+                  type: 'danger',
+                  title: 'Erro!',
+                  message: 'Despesa não cadastrada',
+                  position: 'top-right',
+                  duration: 5000
+
+              })            } else {
+               
+                FlickerModals.showModal({
+                  type: 'warning',
+      title: 'Confirmação ',
+      message: 'Deseja realmente cadastrar esta despesa?',
+      onConfirm: () => {
+        console.log('Item cadastrado!');
+        // Exibir o alerta de sucesso após a exclusão
+        FlickerAlerts.showAlert({
+          type: 'success',
+          title: 'Sucesso!',
+          message: 'Despesa cadastrado com sucesso!',
+          duration: 3000 // duração do alerta
+        });
+      },
+      onCancel: () => {
+        console.log('Ação cancelada.');
+      }
+    });
+
+     
+          }
+          setFormData({ categoria: '', descrição: '', mes: '', ano: '', dataPagamento: ''});
+        } catch (error) {
+          console.log(error);
+      }
+        setFormData({ categoria: '', descrição: '', mes: '', ano: '', dataPagamento: ''});
     };
 
 
@@ -52,8 +90,8 @@ function Despesa(){
             <div>
                 <label>Descrição</label>
                 <textarea 
-                    name="descricao"
-                    value={formData.descricao}
+                    name="descrição"
+                    value={formData.descrição}
                     onChange={handleChange}
               required
                 ></textarea>
@@ -113,8 +151,8 @@ function Despesa(){
                     <label>Data de pagamento</label>
             <input
             type='date'
-              name="data"
-              value={formData.data}
+              name="dataPagamento"
+              value={formData.dataPagamento}
               onChange={handleChange}
               required
             >

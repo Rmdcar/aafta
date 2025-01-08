@@ -34,10 +34,10 @@ function Login() {
           duration: 5000,
         });
       } else {
-        localStorage.setItem('token', res.data.token)
-        localStorage.setItem('usuario', res.data.usuario)
-        const expirationTime = new Date().getTime() + 1000*100
-        localStorage.setItem('tokenExpiration', expirationTime);
+        sessionStorage.setItem('token', res.data.token)
+        sessionStorage.setItem('usuario', res.data.usuario)
+        const expirationTime = new Date().getTime() + 1000 * 60 * 30 // 30 minutos
+        sessionStorage.setItem('tokenExpiration', expirationTime);
         navigate('/home')
         FlickerAlerts.showAlert({
           type: "success",
@@ -58,8 +58,7 @@ function Login() {
     <>
       <div>
         <h1>
-          ASSOCIACAO DOS AUDITORES FISCAIS DE TRIBUTOS MUNICIPAIS DE ANAPOLIS -
-          AAFTA
+          ASSOCIACAO DOS AUDITORES FISCAIS DE TRIBUTOS MUNICIPAIS DE ANAPOLIS - AAFTA
         </h1>
       </div>
 

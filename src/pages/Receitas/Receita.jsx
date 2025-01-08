@@ -1,15 +1,16 @@
 import Header from '../../components/Header.jsx'
-
+import Api from '../../services/Api.js';
+import { FlickerAlerts , FlickerModals } from 'flicker-alerts';
 import { useState } from "react";
 function Receita(){
 
 
     // Estado para armazenar os dados do formulário
     const [formData, setFormData] = useState({
-        nome: '',
+      name: '',
         mes: '' , 
         ano: '' ,
-        data: ''     
+        dataRecebimento: ''     
     });
 
     // Função para atualizar o estado com os valores do formulário
@@ -22,10 +23,47 @@ function Receita(){
     };
 
     // Função para tratar o envio do formulário
-    const handleSubmit = (ev) => {
+    const handleSubmit = async (ev) => {
         ev.preventDefault();
         console.log(formData);
-        setFormData({ nome: '', mes: '', ano: '', data: ''});
+        try {
+          const res = await Api.post('/newcontribution', formData);
+          if (res.data.error === true) {
+              FlickerAlerts.showAlert({
+                  type: 'danger',
+                  title: 'Erro!',
+                  message: 'Receita não cadastrada',
+                  position: 'top-right',
+                  duration: 5000
+
+              })            } else {
+               
+                FlickerModals.showModal({
+                  type: 'warning',
+      title: 'Confirmação',
+      message: 'Deseja realmente cadastrar esta receita?',
+      onConfirm: () => {
+        console.log('Item cadastrado!');
+        // Exibir o alerta de sucesso após a exclusão
+        FlickerAlerts.showAlert({
+          type: 'success',
+          title: 'Sucesso!',
+          message: 'Receita cadastrado com sucesso!',
+          duration: 3000 // duração do alerta
+        });
+      },
+      onCancel: () => {
+        console.log('Ação cancelada.');
+      }
+    });
+
+     
+          }
+          setFormData({ name: '', mes: '', ano: '', dataRecebimento: ''});
+        } catch (error) {
+          console.log(error);
+      }
+      setFormData({ name: '', mes: '', ano: '', dataRecebimento: ''});
     };
 
 
@@ -37,8 +75,8 @@ function Receita(){
                     <div>
                     <label>Nome</label>
             <select
-              name="nome"
-              value={formData.nome}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               required
             >
@@ -101,8 +139,8 @@ function Receita(){
                     <label>Data de recebimento</label>
             <input
             type='date'
-              name="data"
-              value={formData.data}
+              name="dataRecebimento"
+              value={formData.dataRecebimento}
               onChange={handleChange}
               required
             >
