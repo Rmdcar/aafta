@@ -3,9 +3,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      react: 'react',
-    },
+  base: '/', // Base para arquivos estáticos
+  build: {
+    outDir: 'dist', // Diretório de saída
   },
 });
