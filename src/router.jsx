@@ -37,7 +37,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/*", // Rota para capturar todas as outras rotas não encontradas
-    element: <Erro/>, // Redireciona para a página 404
+    element: <Erro/>
   }
 ]);
 
