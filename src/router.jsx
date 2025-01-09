@@ -7,38 +7,40 @@ import Extrato from "./pages/Extrato/Extrato";
 import Login from "./pages/Login/Login";
 import Erro from "./pages/Erro/Erro";
 
-// Função para verificar se o usuário está autenticado
-
-
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />
+    element: <Login />,
   },
   {
     path: "/home",
-    element: <Home /> 
+    element: <Home />,
   },
   {
     path: "/cadastro",
-    element: <Cadastro />
+    element: <Cadastro />,
   },
   {
     path: "/receita",
-    element: <Receita /> 
+    element: <Receita />,
   },
   {
     path: "/despesa",
-    element: <Despesa />
+    element: <Despesa />,
   },
   {
     path: "/extrato",
-    element: <Extrato />
+    element: <Extrato />,
+  },
+  // Redireciona rotas inexistentes explicitamente
+  {
+    path: "*",
+    element: <Navigate to="/erro" />,
   },
   {
-    path: "/*", // Rota para capturar todas as outras rotas não encontradas
-    element: <Erro/>
-  }
+    path: "/erro",
+    element: <Erro />,
+  },
 ]);
 
 export default router;
