@@ -1,10 +1,12 @@
 import Header from '../../components/Header.jsx'
 import Api from '../../services/Api.js';
-import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
 import { FlickerAlerts , FlickerModals } from 'flicker-alerts';
 import styles from "./styles.module.css";
 
 function Despesa(){
+  const navigate = useNavigate();
     const [formData, setFormData] = useState({
         categoria: '',
         descrição: '',
@@ -66,6 +68,17 @@ function Despesa(){
         setFormData({ categoria: '', descrição: '', mes: '', ano: '', dataPagamento: ''});
     };
 
+        useEffect(() => {
+            const token = sessionStorage.getItem('token');
+            const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+            const currentTime = new Date().getTime();
+    
+            if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('tokenExpiration');
+                navigate('/');
+            }
+        }, [navigate]);
 
     return(
         <>

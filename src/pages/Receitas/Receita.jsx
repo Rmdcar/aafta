@@ -1,12 +1,13 @@
 import Header from '../../components/Header.jsx'
 import Api from '../../services/Api.js';
 import { FlickerAlerts , FlickerModals } from 'flicker-alerts';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from "./styles.module.css";
 
 function Receita(){
 
-
+  const navigate = useNavigate();
     // Estado para armazenar os dados do formulário
     const [formData, setFormData] = useState({
       name: '',
@@ -67,6 +68,17 @@ function Receita(){
       }
       setFormData({ name: '', mes: '', ano: '', dataRecebimento: ''});
     };
+    useEffect(() => {
+      const token = sessionStorage.getItem('token');
+      const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+      const currentTime = new Date().getTime();
+
+      if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
+          sessionStorage.removeItem('token');
+          sessionStorage.removeItem('tokenExpiration');
+          navigate('/');
+      }
+  }, [navigate]);
 
 
     return(

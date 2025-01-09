@@ -8,53 +8,36 @@ import Login from "./pages/Login/Login";
 import Erro from "./pages/Erro/Erro";
 
 // Função para verificar se o usuário está autenticado
-const isAuthenticated = () => {
-  const token = sessionStorage.getItem('token');
-  const expirationTime = sessionStorage.getItem('tokenExpiration');
-  if (!token || !expirationTime) {
-    return false;
-  }
-  const currentTime = new Date().getTime();
-  return currentTime < expirationTime;
-};
 
-// Componente de Rota Protegida
-const ProtectedRoute = ({ element }) => {
-  return isAuthenticated() ? element : <Navigate to="/" />;
-};
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <Login />
   },
   {
     path: "/home",
-    element: <ProtectedRoute element={<Home />} />,
+    element: <Home /> 
   },
   {
     path: "/cadastro",
-    element: <ProtectedRoute element={<Cadastro />} />,
+    element: <Cadastro />
   },
   {
     path: "/receita",
-    element: <ProtectedRoute element={<Receita />} />,
+    element: <Receita /> 
   },
   {
     path: "/despesa",
-    element: <ProtectedRoute element={<Despesa />} />,
+    element: <Despesa />
   },
   {
     path: "/extrato",
-    element: <ProtectedRoute element={<Extrato />} />,
-  },
-  {
-    path: "/404", 
-    element: <Erro />
+    element: <Extrato />
   },
   {
     path: "/*", // Rota para capturar todas as outras rotas não encontradas
-    element: <Navigate to="/404" />, // Redireciona para a página 404
+    element: <Erro/>, // Redireciona para a página 404
   }
 ]);
 

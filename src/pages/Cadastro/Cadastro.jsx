@@ -1,19 +1,19 @@
 import Header from '../../components/Header.jsx';
 import Api from '../../services/Api.js';
-import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
 import { FlickerAlerts } from 'flicker-alerts';
+
 import styles from "./styles.module.css";
 
 function Cadastro() {
-
-    // Estado para armazenar os dados do formulário
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: ''
     });
 
-    // Função para atualizar o estado com os valores do formulário
     const handleChange = (ev) => {
         const { name, value } = ev.target;
         setFormData({
@@ -22,7 +22,6 @@ function Cadastro() {
         });
     };
 
-    // Função para tratar o envio do formulário
     const handleSubmit = async (ev) => {
         ev.preventDefault();
         
@@ -35,23 +34,40 @@ function Cadastro() {
                     message: 'Email já está em uso',
                     position: 'top-right',
                     duration: 5000
-
-                })            } else {
-                
+                });
+            } else {
                 FlickerAlerts.showAlert({
                     type: 'success',
                     title: 'Sucesso!',
                     message: 'Operação realizada com sucesso',
                     position: 'top-right',
                     duration: 5000
-
-                })
+                });
+                setFormData({ name: '', email: '', password: '' }); // Limpar apenas se o cadastro for bem-sucedido
             }
-            setFormData({ name: '', email: '', password: '' });
         } catch (error) {
             console.log(error);
+            FlickerAlerts.showAlert({
+                type: 'danger',
+                title: 'Erro!',
+                message: 'Ocorreu um erro ao cadastrar. Tente novamente.',
+                position: 'top-right',
+                duration: 5000
+            });
         }
     };
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+        const currentTime = new Date().getTime();
+
+        if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('tokenExpiration');
+            navigate('/');
+        }
+    }, [navigate]);
 
     return (
         <>
