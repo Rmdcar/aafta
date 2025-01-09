@@ -49,8 +49,12 @@ const router = createBrowserRouter([
     element: <ProtectedRoute element={<Extrato />} />,
   },
   {
-    path: "/*",
-    element: <Erro/>
+    path: "/404", 
+    element: <Erro />
+  },
+  {
+    path: "*", // Rota para capturar todas as outras rotas não encontradas
+    element: <Navigate to="/404" />, // Redireciona para a página 404
   }
 ]);
 
