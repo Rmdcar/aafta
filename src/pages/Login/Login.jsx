@@ -66,7 +66,7 @@ function Login() {
     <>
       <div className={styles.title}>
         <h1>
-          ASSOCIAÇÃO DOS AUDITORES FISCAIS DE TRIBUTOS MUNICIPAIS DE ANÁPOLIS - AAFTA
+          ASSOCIAÇÃO DOS AUDITORES <br />FISCAIS DE TRIBUTOS MUNICIPAIS DE<br /> ANÁPOLIS - AAFTA
         </h1>
       </div>
 

@@ -1,59 +1,80 @@
 .title {
-    font-family: Poppins, sans-serif;
-    font-size: 5vh;
-    text-align: center;
-    margin: 20px 0;
-  }
-  
+  font-family: Poppins, sans-serif;
+  font-size: 5vh;
+  text-align: center;
+  margin: 20px 0;
+  color: rgb(23, 25, 179); /* Cor do título */
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2vh;
+  text-align: center;
+  justify-content: space-around;
+  background-color: #f9f9f9; /* Cor de fundo da navbar */
+  padding: 10px 0; /* Espaçamento interno */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+}
+
+.links {
+  font-weight: 500;
+  font-size: 3vh;
+  padding: 10px 15px; /* Aumenta o padding para mais área clicável */
+  background-color: rgb(23, 25, 179);
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s; /* Transições suaves */
+  width: 15%;
+}
+
+.links:hover {
+  background-color: rgb(15, 17, 120); /* Cor ao passar o mouse */
+  transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
+}
+
+.links a {
+  color: white;
+  text-decoration: none;
+}
+
+.hamburgerMenu {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  margin: 10px; /* Espaçamento ao redor do menu hamburger */
+}
+
+.hamburgerMenu div {
+  width: 30px; /* Largura aumentada para melhor visibilidade */
+  height: 4px; /* Altura aumentada para melhor visibilidade */
+  background-color: rgb(23, 25, 179); /* Cor do hamburger */
+  margin: 4px 0;
+  transition: all 0.3s; /* Transição suave */
+}
+
+@media (max-width: 768px) {
   .navbar {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 2vh;
-    text-align: center;
-    justify-content: space-around;
-  }
-  
-  .links {
-    font-weight: 500;
-    font-size: 3vh;
-    padding: 10px;
-    background-color: rgb(23, 25, 179);
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-  }
-  
-  .links a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .hamburgerMenu {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-  }
-  
-  .hamburgerMenu div {
-    width: 25px;
-    height: 3px;
-    background-color: black;
-    margin: 4px 0;
-  }
-  
-  @media (max-width: 768px) {
-    .navbar {
       flex-direction: column;
-      display: none;
-    }
-  
-    .navbar.active {
-      display: flex;
-    }
-  
-    .hamburgerMenu {
-      display: flex;
-    }
+      display: none; /* Esconde o menu por padrão */
+      width: 100%; /* Largura total em dispositivos móveis */
+      
   }
-  
+
+  .navbar.active {
+      display: flex; /* Exibe o menu quando ativo */
+      
+  }
+
+  .hamburgerMenu {
+      display: flex; /* Exibe o menu hamburger em dispositivos móveis */
+      
+  }
+
+.links{
+  width: 100%;
+}
+
+}

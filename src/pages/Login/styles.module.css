@@ -1,3 +1,8 @@
+* {
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
+}
+
+
 .title {
     font-family: Poppins, sans-serif;
     text-align: center;
@@ -29,7 +34,7 @@ label {
 }
 
 input {
-    width: 100%;
+    width: 100%; /* Altera para 100% para ocupar toda a largura do formulário */
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -51,6 +56,8 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 76%; /* Altera para 100% para alinhar com os inputs */
+    margin-top: 10px; /* Adiciona um pequeno espaçamento acima do botão */
 }
 
 button:hover {
@@ -72,5 +79,6 @@ button:hover {
 
     button {
         font-size: 1rem; /* Ajusta o tamanho do botão em telas menores */
+        width: 90%
     }
 }
