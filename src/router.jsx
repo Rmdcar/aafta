@@ -6,6 +6,7 @@ import Despesa from "./pages/Despesas/Despesa";
 import Extrato from "./pages/Extrato/Extrato";
 import Login from "./pages/Login/Login";
 import Erro from "./pages/Erro/Erro";
+import UsuariosCadastrados from "./pages/Cadastro/UsuariosCadastrados"
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
     path: "/erro",
     element: <Erro />,
   },
+  {
+    path: '/usuarios',
+    element: <UsuariosCadastrados/>
+  }
 ]);
 
 export default router;
