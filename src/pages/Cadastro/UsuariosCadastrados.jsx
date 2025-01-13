@@ -21,26 +21,37 @@ const UsuariosCadastrados = () => {
     <>
       <Header />
       <div className={styles.container}>
-        <h1>Usuários Cadastrados</h1>
-        <h2 className={styles.addUserButton}>
-          <Link to="/cadastro">Cadastrar Novo</Link>
-        </h2>
-        <div className={styles.userHeader}>
-          <h2>Nome</h2>
-          <h2>Email</h2>
+        <div className={styles.menu}>
+          <h2 className={styles.menuItem}>
+            <Link to="/usuarios">Todos usuários</Link>
+          </h2>
+          <h2 className={styles.menuItem}>
+            <Link to="/cadastro">Cadastrar Novo</Link>
+          </h2>
         </div>
-        <ul className={styles.userList}>
-          {users.map((user) => (
-            <li key={user.id}>
-              <div>{user.name}</div>
-              <div>{user.email}</div>
-              <div className={styles.actions}>
-                <button className={styles.editButton}>Editar</button>
-                <button className={styles.deleteButton}>Excluir</button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div className={styles.tableContainer}>
+          <table className={styles.userTable}>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td className={styles.actions}>
+                    <button className={styles.editButton}>Editar</button>
+                    <button className={styles.deleteButton}>Excluir</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

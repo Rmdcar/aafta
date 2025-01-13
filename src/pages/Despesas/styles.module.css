@@ -28,7 +28,7 @@ label {
 }
 
 select, input[type='date'], textarea {
-    width: 100%;
+    width: 40vh;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;

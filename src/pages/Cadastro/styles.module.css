@@ -14,58 +14,48 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    text-align: center;
-    color: #333;
-}
-
-.addUserButton {
-    text-align: center;
+.menu {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.addUserButton a {
+.menuItem {
+    flex: 1;
+    text-align: center;
+}
+
+.menuItem a {
     text-decoration: none;
     color: #fff;
     background-color: rgb(23, 25, 179);
     padding: 10px 20px;
     border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
-.addUserButton a:hover {
+.menuItem a:hover {
     background-color: #0056b3;
 }
 
-.userHeader {
-    display: flex;
-    gap: 30vh;
-    background-color: #e9ecef;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    color: rgb(23, 25, 179);
+.tableContainer {
+    overflow-x: auto;
 }
 
-.userList {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+.userTable {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.userList li {
-    background-color: #f9f9f9;
+.userTable th, .userTable td {
     border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 8px;
+    text-align: left;
 }
 
-.userList div {
-    flex: 1;
-    margin-right: 10px;
+.userTable th {
+    background-color: #e9ecef;
+    color: rgb(23, 25, 179);
 }
 
 .actions {
@@ -74,7 +64,7 @@ h1 {
 }
 
 .editButton, .deleteButton {
-    padding: 10px 15px;
+    padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -100,30 +90,35 @@ h1 {
 }
 
 @media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-
-    .userHeader, .userList li {
+    .menu {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 1vh;
     }
 
-    .userList div {
-        margin-right: 0;
+    .menuItem {
         margin-bottom: 10px;
+    }
+
+    .userTable th, .userTable td {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .userTable th, .userTable td {
+        white-space: normal;
+        }
+
+    .userTable th, .userTable td:nth-child(1), .userTable td:nth-child(2) {
+        max-width: 120px; /* Limita a largura das colunas Nome e Email */
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .actions {
         flex-direction: column;
-        width: 100%;
-        gap: 1vh
     }
 
     .editButton, .deleteButton {
         width: 100%;
-        
-        
+        margin-bottom: 10px;
     }
 }

@@ -76,7 +76,7 @@ function Cadastro() {
       
         
         <div>
-        <h1 >Cadastrar</h1>
+        <h1 >Novo cadastro</h1>
           <form onSubmit={handleSubmit}>
             <label>
               Nome
