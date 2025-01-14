@@ -38,7 +38,7 @@ function Receita() {
       onConfirm: async () => {
         try {
           const res = await Api.post('/newcontribution', formData);
-          console.log(formData)
+          
           if (res.data.error) {
             FlickerAlerts.showAlert({
               type: 'danger',

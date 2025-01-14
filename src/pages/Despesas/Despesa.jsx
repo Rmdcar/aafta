@@ -14,7 +14,8 @@ function Despesa() {
     descricao: '',
     mes: '',
     ano: '',
-    dataPagamento: ''
+    dataPagamento: '',
+    valor: ''
   });
 
   // Função para atualizar o estado com os valores do formulário
@@ -32,6 +33,7 @@ function Despesa() {
     console.log(formData);
     try {
       const res = await Api.post('/newexpense', formData);
+      console.log(formData)
       if (res.data.error === true) {
         FlickerAlerts.showAlert({
           type: 'danger',
@@ -59,7 +61,7 @@ function Despesa() {
           }
         });
       }
-      setFormData({ categoria: '', descricao: '', mes: '', ano: '', dataPagamento: '' });
+      setFormData({ categoria: '', descricao: '', mes: '', ano: '', dataPagamento: '', valor: '' });
     } catch (error) {
       console.log(error);
     }
@@ -167,6 +169,18 @@ function Despesa() {
             type="date"
             name="dataPagamento"
             value={formData.dataPagamento}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Valor</label>
+          <input
+            className={styles.inputField}
+            type="number"
+            name="valor"
+            value={formData.valor}
             onChange={handleChange}
             required
           />
