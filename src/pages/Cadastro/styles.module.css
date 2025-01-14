@@ -92,10 +92,12 @@ body {
 @media (max-width: 768px) {
     .menu {
         flex-direction: column;
+        gap: 3vh;
     }
 
     .menuItem {
         margin-bottom: 10px;
+        width: 100%;
     }
 
     .userTable th, .userTable td {
