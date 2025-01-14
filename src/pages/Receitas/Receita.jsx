@@ -3,7 +3,7 @@ import Api from '../../services/Api.js';
 import { FlickerAlerts, FlickerModals } from 'flicker-alerts';
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import styles from './styles.module.css'
+import styles from './styles.module.css';
 
 function Receita() {
   const navigate = useNavigate();
@@ -12,7 +12,8 @@ function Receita() {
     name: '',
     mes: '',
     ano: '',
-    dataRecebimento: ''
+    dataRecebimento: '',
+    valor: ''
   });
 
   const [users, setUsers] = useState([]);
@@ -28,38 +29,48 @@ function Receita() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = async (ev) => {
+  const handleSubmit = (ev) => {
     ev.preventDefault();
-    try {
-      const res = await Api.post('/newcontribution', formData);
-      if (res.data.error) {
-        FlickerAlerts.showAlert({
-          type: 'danger',
-          title: 'Erro!',
-          message: 'Receita não cadastrada',
-          position: 'top-right',
-          duration: 5000
-        });
-      } else {
-        FlickerModals.showModal({
-          type: 'warning',
-          title: 'Confirmação',
-          message: 'Deseja realmente cadastrar esta receita?',
-          onConfirm: () => {
+    FlickerModals.showModal({
+      type: 'warning',
+      title: 'Confirmação',
+      message: 'Deseja realmente cadastrar esta receita?',
+      onConfirm: async () => {
+        try {
+          const res = await Api.post('/newcontribution', formData);
+          console.log(formData)
+          if (res.data.error) {
+            FlickerAlerts.showAlert({
+              type: 'danger',
+              title: 'Erro!',
+              message: 'Receita não cadastrada',
+              position: 'top-right',
+              duration: 5000
+            });
+          } else {
             FlickerAlerts.showAlert({
               type: 'success',
               title: 'Sucesso!',
               message: 'Receita cadastrada com sucesso!',
               duration: 3000
             });
-          },
-          onCancel: () => console.log('Ação cancelada.')
-        });
+            setFormData({ name: '', mes: '', ano: '', dataRecebimento: '', valor: '' });
+          }
+        } catch (error) {
+          console.error(error);
+          FlickerAlerts.showAlert({
+            type: 'danger',
+            title: 'Erro!',
+            message: 'Erro ao cadastrar receita. Tente novamente.',
+            position: 'top-right',
+            duration: 5000
+          });
+        }
+      },
+      onCancel: () => {
+        console.log('Ação cancelada.');
       }
-      setFormData({ name: '', mes: '', ano: '', dataRecebimento: '' });
-    } catch (error) {
-      console.error(error);
-    }
+    });
   };
 
   useEffect(() => {
@@ -78,31 +89,31 @@ function Receita() {
       <Header />
       <h1 className={styles.title}>Receita</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
-    <div className={styles.formGroup}>
-        <label className={styles.label}>Nome</label>
-        <select
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Nome</label>
+          <select
             className={`${styles.inputField} input-field`}
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
-        >
+          >
             <option value="">SELECIONE</option>
             {users.map((user) => (
-                <option key={user.id} value={user.name}>{user.name}</option>
+              <option key={user.id} value={user.name}>{user.name}</option>
             ))}
-        </select>
-    </div>
+          </select>
+        </div>
 
-    <div className={styles.formGroup}>
-        <label className={styles.label}>Mês</label>
-        <select
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Mês</label>
+          <select
             className={styles.inputField}
             name="mes"
             value={formData.mes}
             onChange={handleChange}
             required
-        >
+          >
             <option value="">SELECIONE</option>
             <option value="01">Janeiro</option>
             <option value="02">Fevereiro</option>
@@ -116,18 +127,18 @@ function Receita() {
             <option value="10">Outubro</option>
             <option value="11">Novembro</option>
             <option value="12">Dezembro</option>
-        </select>
-    </div>
+          </select>
+        </div>
 
-    <div className={styles.formGroup}>
-        <label className={styles.label}>Ano</label>
-        <select
-           className={styles.inputField}
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Ano</label>
+          <select
+            className={styles.inputField}
             name="ano"
             value={formData.ano}
             onChange={handleChange}
             required
-        >
+          >
             <option value="">SELECIONE</option>
             <option value="2024">2024</option>
             <option value="2025">2025</option>
@@ -141,24 +152,35 @@ function Receita() {
             <option value="2033">2033</option>
             <option value="2034">2034</option>
             <option value="2035">2035</option>
-        </select>
-    </div>
+          </select>
+        </div>
 
-    <div className={styles.formGroup}>
-        <label className={styles.label}>Data de recebimento</label>
-        <input
-           className={styles.inputField}
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Data de recebimento</label>
+          <input
+            className={styles.inputField}
             type="date"
             name="dataRecebimento"
             value={formData.dataRecebimento}
             onChange={handleChange}
             required
-        />
-    </div>
+          />
+        </div>
 
-    <button className={styles.button} type="submit">Salvar</button>
-</form>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Valor</label>
+          <input
+            className={styles.inputField}
+            type="number"
+            name="valor"
+            value={formData.valor}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
+        <button className={styles.button} type="submit">Salvar</button>
+      </form>
     </>
   );
 }

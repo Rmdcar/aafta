@@ -1,12 +1,13 @@
 import Header from "../../components/Header.jsx";
 import Api from "../../services/Api.js";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
 import styles from "./styles.module.css";
 import { FlickerAlerts, FlickerModals } from 'flicker-alerts';
 
 const UsuariosCadastrados = () => {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate(); 
 
   const handleDelete = async (userId) => {
     try {
@@ -39,11 +40,16 @@ const UsuariosCadastrados = () => {
             title: 'Ação cancelada!',
             message: 'Usuário não deletado!',
             duration: 3000
-          });        }
+          });
+        }
       });
     } catch (error) {
       console.error('Erro ao abrir o modal:', error);
     }
+  };
+
+  const handleEdit = (user) => {
+    navigate(`/updateuser/${user._id}`, { state: { user } }); // Passa os dados do usuário
   };
 
   useEffect(() => {
@@ -83,10 +89,15 @@ const UsuariosCadastrados = () => {
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td className={styles.actions}>
-                    <button className={styles.editButton}>Editar</button>
+                    <button 
+                      className={styles.editButton}
+                      onClick={() => handleEdit(user)} // Passa o usuário
+                    >
+                      Editar
+                    </button>
                     <button 
                       className={styles.deleteButton}
-                      onClick={() => handleDelete(user._id) } // Passa o ID do usuário
+                      onClick={() => handleDelete(user._id)} // Passa o ID do usuário
                     >
                       Excluir
                     </button>

@@ -7,6 +7,7 @@ import Extrato from "./pages/Extrato/Extrato";
 import Login from "./pages/Login/Login";
 import Erro from "./pages/Erro/Erro";
 import UsuariosCadastrados from "./pages/Cadastro/UsuariosCadastrados"
+import UpdateUser from "./pages/Cadastro/UpdateUser"
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: '/usuarios',
     element: <UsuariosCadastrados/>
+  },
+  {
+    path: '/updateuser/:id',
+    element: <UpdateUser/>
   }
 ]);
 
