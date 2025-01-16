@@ -30,41 +30,50 @@ function Despesa() {
   // Função para tratar o envio do formulário
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-    console.log(formData);
-    try {
-      const res = await Api.post('/newexpense', formData);
-      console.log(formData)
-      if (res.data.error === true) {
-        FlickerAlerts.showAlert({
-          type: 'danger',
-          title: 'Erro!',
-          message: 'Despesa não cadastrada',
-          position: 'top-right',
-          duration: 5000
-        });
-      } else {
-        FlickerModals.showModal({
-          type: 'warning',
-          title: 'Confirmação',
-          message: 'Deseja realmente cadastrar esta despesa?',
-          onConfirm: () => {
-            console.log('Item cadastrado!');
+    FlickerModals.showModal({
+      type: 'warning',
+      title: 'Confirmação',
+      message: 'Deseja realmente cadastrar esta despesa?',
+      onConfirm: async () => {
+        try {
+          const res = await Api.post('/newexpense', formData);
+          if (res.data.error) {
+            FlickerAlerts.showAlert({
+              type: 'danger',
+              title: 'Erro!',
+              message: 'Despesa não cadastrada',
+              position: 'top-right',
+              duration: 5000
+            });
+          } else {
             FlickerAlerts.showAlert({
               type: 'success',
               title: 'Sucesso!',
               message: 'Despesa cadastrada com sucesso!',
               duration: 3000
             });
-          },
-          onCancel: () => {
-            console.log('Ação cancelada.');
+            setFormData({ categoria: '', descricao: '', mes: '', ano: '', dataPagamento: '', valor: '' });
           }
+        } catch (error) {
+          console.error(error);
+          FlickerAlerts.showAlert({
+            type: 'danger',
+            title: 'Erro!',
+            message: 'Erro ao cadastrar despesa. Tente novamente.',
+            position: 'top-right',
+            duration: 5000
+          });
+        }
+      },
+      onCancel: () => {
+        FlickerAlerts.showAlert({
+          type: "info",
+          title: "Ação cancelada!",
+          message: "Atualização não realizada!",
+          duration: 3000,
         });
       }
-      setFormData({ categoria: '', descricao: '', mes: '', ano: '', dataPagamento: '', valor: '' });
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
 
   useEffect(() => {

@@ -27,7 +27,7 @@ label {
     color: #555;
 }
 
-select, input[type='date'], textarea {
+select, input[type='date'], textarea , .inputField{
     width: 40vh;
     padding: 10px;
     margin-bottom: 20px;

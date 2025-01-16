@@ -68,7 +68,12 @@ function Receita() {
         }
       },
       onCancel: () => {
-        console.log('Ação cancelada.');
+        FlickerAlerts.showAlert({
+          type: "info",
+          title: "Ação cancelada!",
+          message: "Atualização não realizada!",
+          duration: 3000,
+        });
       }
     });
   };

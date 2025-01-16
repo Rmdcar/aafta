@@ -1,30 +1,86 @@
-import Header from '../../components/Header.jsx'
-
+import Header from '../../components/Header.jsx';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import styles from "./styles.module.css";
+import Api from "../../services/Api.js";
 
-function Extrato(){
-    const navigate = useNavigate();
+function Extrato() {
+  const navigate = useNavigate();
+  const [combinedData, setCombinedData] = useState([]);
 
-    useEffect(() => {
-        const token = sessionStorage.getItem('token');
-        const tokenExpiration = sessionStorage.getItem('tokenExpiration');
-        const currentTime = new Date().getTime();
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+    const currentTime = new Date().getTime();
 
-        if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('tokenExpiration');
-            navigate('/');
-        }
-    }, [navigate]);
+    if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('tokenExpiration');
+      navigate('/');
+    }
+  }, [navigate]);
 
-    return(
-        <>
-         <Header/>
-        <h1>Extrato</h1>
-        </>
-    )
+  useEffect(() => {
+    const fetchContributionsAndExpenses = async () => {
+      try {
+        const [contributionsRes, expensesRes] = await Promise.all([
+          Api.get('/getallcontributions'),
+          Api.get('/getallexpenses')
+        ]);
+
+  
+
+        const contributionsData = Array.isArray(contributionsRes.data) ? contributionsRes.data.map(contribution => ({
+          ...contribution,
+          dataRecebimento: new Date(contribution.dataRecebimento),
+          tipo: 'Receitas'
+        })) : [];
+
+        const expensesData = Array.isArray(expensesRes.data) ? expensesRes.data.map(expense => ({
+          ...expense,
+          dataPagamento: new Date(expense.dataPagamento),
+          tipo: 'Despesa'
+        })) : [];
+
+        const combined = [...contributionsData, ...expensesData].sort((a, b) => new Date(a.dataRecebimento || a.dataPagamento) - new Date(b.dataRecebimento || b.dataPagamento));
+
+        setCombinedData(combined);
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    };
+
+    fetchContributionsAndExpenses();
+  }, []);
+
+  return (
+    <>
+      <Header />
+      <h1 className={styles.title}>Extrato</h1>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Nome</th>
+            <th>Competência</th>
+            <th>Data</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          {combinedData.map((item, index) => (
+            <tr key={index}>
+              <td>{item.tipo}</td>
+              <td>{item.name || item.categoria}</td>
+              <td>{item.mes}/{item.ano}</td>
+              <td>{item.dataRecebimento ? item.dataRecebimento.toLocaleDateString('pt-BR') : item.dataPagamento.toLocaleDateString('pt-BR')}</td>
+              <td>{item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
 }
 
-
-export default Extrato
+export default Extrato;
