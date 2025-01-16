@@ -1,5 +1,5 @@
 import Api from "../../services/Api.js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FlickerAlerts } from "flicker-alerts";
 import styles from "./styles.module.css";
@@ -25,8 +25,12 @@ function Login() {
   // Função para tratar o envio do formulário
   const handleSubmit = async (ev) => {
     ev.preventDefault();
+    
+
     try {
       const res = await Api.post("/login", formData);
+      
+
       if (res.data.error === true) {
         setErrorMessage("Credenciais inválidas"); // Armazena a mensagem de erro
         FlickerAlerts.showAlert({
@@ -60,18 +64,18 @@ function Login() {
 
   return (
     <>
-      <div className={styles.titleContainer}>
-        <h1 className={styles.title}>
+      <div className={styles.title}>
+        <h1>
           ASSOCIAÇÃO DOS AUDITORES <br />FISCAIS DE TRIBUTOS MUNICIPAIS DE<br /> ANÁPOLIS - AAFTA
         </h1>
       </div>
 
-      <div className={styles.formContainer}>
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <label className={styles.label}>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <br />
+          <label>
             E-mail
             <input
-              className={styles.input}
               type="email"
               name="email"
               required
@@ -79,10 +83,10 @@ function Login() {
               onChange={handleChange}
             />
           </label>
-          <label className={styles.label}>
+          <br />
+          <label>
             Senha
             <input
-              className={styles.input}
               type="password"
               name="password"
               required
@@ -90,7 +94,7 @@ function Login() {
               onChange={handleChange}
             />
           </label>
-          <button className={styles.button} type="submit">Logar</button>
+          <button type="submit">Logar</button>
         </form>
         {errorMessage && <p className={styles.error}>{errorMessage}</p>} {/* Renderiza a mensagem de erro */}
       </div>

@@ -74,12 +74,11 @@ button:hover {
     }
 
     form {
-        padding: 15px; /* Ajusta o padding do formulário em telas menores */
-        width: 80vh
+        padding: 12%; /* Ajusta o padding do formulário em telas menores */
     }
 
     button {
         font-size: 1rem; /* Ajusta o tamanho do botão em telas menores */
-        width: 81%
+        width: 90%
     }
 }
