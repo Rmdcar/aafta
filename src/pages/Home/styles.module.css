@@ -1,0 +1,41 @@
+/* Estilos para o título da página */
+.title {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 20px; 
+  }
+  
+  /* Estilos para o dashboard */
+  .dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  /* Estilos para os cartões */
+  .card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+  }
+  
+  /* Estilos para o título dos cartões */
+  .cardTitle {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  /* Estilos para o valor dos cartões */
+  .cardValue {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000;
+  }
+  

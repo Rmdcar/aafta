@@ -103,10 +103,10 @@ function Despesa() {
             required
           >
             <option value="">SELECIONE</option>
-            <option value="custas">Custas Judiciais</option>
-            <option value="honorarios">Honorários Advogado</option>
-            <option value="contribuicoes">Contribuições</option>
-            <option value="taxas">Custas</option>
+            <option value="Custas Judiciais">Custas Judiciais</option>
+            <option value="Honorários Advogado">Honorários Advogado</option>
+            <option value="Contribuições">Contribuições</option>
+            <option value="Custas">Custas</option>
           </select>
         </div>
 
