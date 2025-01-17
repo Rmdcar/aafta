@@ -8,6 +8,7 @@ import Login from "./pages/Login/Login";
 import Erro from "./pages/Erro/Erro";
 import UsuariosCadastrados from "./pages/Cadastro/UsuariosCadastrados"
 import UpdateUser from "./pages/Cadastro/UpdateUser"
+import Receitaextrato from "./pages/Receitas/Receitas-extrato";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/receita",
     element: <Receita />,
+  },
+  {
+    path: "/extratoreceita",
+    element: <Receitaextrato />,
   },
   {
     path: "/despesa",

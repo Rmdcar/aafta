@@ -25,11 +25,13 @@ function Home() {
 
   useEffect(() => {
     const fetchDashboardData = async () => {
+      const token = sessionStorage.getItem('token'); // Obtenha o token aqui
+
       try {
         const [contributionsRes, expensesRes, usersRes] = await Promise.all([
-          Api.get('/getallcontributions'),
-          Api.get('/getallexpenses'),
-          Api.get('/getAllUsers')
+          Api.get('/getallcontributions', { headers: { Authorization: `Bearer ${token}` } }),
+          Api.get('/getallexpenses', { headers: { Authorization: `Bearer ${token}` } }),
+          Api.get('/getAllUsers', { headers: { Authorization: `Bearer ${token}` } })
         ]);
 
         const receitasTotal = contributionsRes.data.reduce((acc, contribution) => acc + parseFloat(contribution.valor), 0);

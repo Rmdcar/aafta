@@ -9,30 +9,26 @@ function Login() {
     email: "",
     password: "",
   });
-  const [errorMessage, setErrorMessage] = useState(""); // Estado para armazenar a mensagem de erro
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  // Função para atualizar o estado com os valores do formulário
   const handleChange = (ev) => {
     const { name, value } = ev.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-    setErrorMessage(""); // Limpa a mensagem de erro ao digitar
+    setErrorMessage("");
   };
 
-  // Função para tratar o envio do formulário
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-    
 
     try {
       const res = await Api.post("/login", formData);
-      
 
-      if (res.data.error === true) {
-        setErrorMessage("Credenciais inválidas"); // Armazena a mensagem de erro
+      if (res.data.error) {
+        setErrorMessage("Credenciais inválidas");
         FlickerAlerts.showAlert({
           type: "danger",
           title: "Erro!",
@@ -56,8 +52,8 @@ function Login() {
       }
       setFormData({ email: "", password: "" });
     } catch (error) {
-      console.error("Erro ao fazer login:", error); // Log do erro
-      setErrorMessage(`${error} Ocorreu um erro ao tentar fazer login. Tente novamente.`); // Armazena a mensagem de erro
+      console.error("Erro ao fazer login:", error);
+      setErrorMessage("Ocorreu um erro ao tentar fazer login. Tente novamente."); // Mensagem de erro mais clara
       setFormData({ email: "", password: "" });
     }
   };
@@ -96,7 +92,7 @@ function Login() {
           </label>
           <button type="submit">Logar</button>
         </form>
-        {errorMessage && <p className={styles.error}>{errorMessage}</p>} {/* Renderiza a mensagem de erro */}
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
       </div>
     </>
   );

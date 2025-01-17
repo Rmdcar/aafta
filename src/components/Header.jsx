@@ -37,7 +37,7 @@ function Header() {
           <Link to="/usuarios">Cadastro</Link>
         </div>
         <div className={styles.links}>
-          <Link to="/receita">Receitas</Link>
+          <Link to="/extratoreceita">Receitas</Link>
         </div>
         <div className={styles.links}>
           <Link to="/despesa">Despesas</Link>

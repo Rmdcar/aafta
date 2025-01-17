@@ -23,10 +23,12 @@ function Extrato() {
 
   useEffect(() => {
     const fetchContributionsAndExpenses = async () => {
+      const token = sessionStorage.getItem('token'); // Obtenha o token aqui
+
       try {
         const [contributionsRes, expensesRes] = await Promise.all([
-          Api.get('/getallcontributions'),
-          Api.get('/getallexpenses')
+          Api.get('/getallcontributions', { headers: { Authorization: `Bearer ${token}` } }),
+          Api.get('/getallexpenses', { headers: { Authorization: `Bearer ${token}` } })
         ]);
 
         const contributionsData = Array.isArray(contributionsRes.data) ? contributionsRes.data.map(contribution => ({
