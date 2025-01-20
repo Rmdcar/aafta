@@ -50,7 +50,7 @@ body {
 .userTable th, .userTable td {
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
+    text-align: center;
 }
 
 .userTable th {
@@ -59,7 +59,7 @@ body {
 }
 
 .actions {
-    display: flex;
+    
     gap: 10px;
 }
 

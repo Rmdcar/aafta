@@ -40,7 +40,7 @@ function Header() {
           <Link to="/extratoreceita">Receitas</Link>
         </div>
         <div className={styles.links}>
-          <Link to="/despesa">Despesas</Link>
+          <Link to="/extratodespesa">Despesas</Link>
         </div>
         <div className={styles.links}>
           <Link to="/extrato">Extrato</Link>

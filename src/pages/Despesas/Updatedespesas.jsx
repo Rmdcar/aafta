@@ -1,67 +1,83 @@
 import Header from '../../components/Header.jsx';
 import Api from '../../services/Api.js';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from "react";
 import { FlickerAlerts, FlickerModals } from 'flicker-alerts';
-import styles from "./styles.module.css";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import styles from './styles.module.css';
 
-function Despesa() {
+function Updatedespesas() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const despesa = location.state.despesa;
 
-  // Estado para armazenar os dados do formulário
   const [formData, setFormData] = useState({
-    categoria: '',
-    descricao: '',
-    mes: '',
-    ano: '',
-    dataPagamento: '',
-    valor: ''
+    categoria: despesa.categoria,
+    descricao: despesa.descricao,
+    mes: despesa.mes,
+    ano: despesa.ano,
+    dataPagamento: despesa.dataPagamento.split('T')[0], // Se a data estiver em formato ISO
+    valor: despesa.valor
   });
 
-  // Função para atualizar o estado com os valores do formulário
+  const [despesas, setDespesas] = useState([]);
+
+  useEffect(() => {
+    const fetchDespesas = async () => {
+      const token = sessionStorage.getItem('token');
+      try {
+        const response = await Api.get("/getallexpenses", { headers: { Authorization: `Bearer ${token}` } });
+        setDespesas(response.data); // Corrigido para setDespesas
+      } catch (error) {
+        console.error("Erro ao buscar despesas:", error);
+      }
+    };
+
+    fetchDespesas();
+  }, []);
+
   const handleChange = (ev) => {
     const { name, value } = ev.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData((prevData) => ({ 
+        ...prevData, 
+        [name]: value 
+    }));
   };
 
-  // Função para tratar o envio do formulário
-  const handleSubmit = async (ev) => {
+  const handleSubmit = (ev) => {
     ev.preventDefault();
     FlickerModals.showModal({
-      type: 'warning',
+      type: 'confirm',
       title: 'Confirmação',
-      message: 'Deseja realmente cadastrar esta despesa?',
+      message: 'Deseja realmente atualizar esta despesa?',
       onConfirm: async () => {
         try {
-          const res = await Api.post('/newexpense', formData);
+          const res = await Api.patch(`/updateexpense/${despesa._id}`, formData); // Use o ID da despesa da URL
           if (res.data.error) {
             FlickerAlerts.showAlert({
-              type: 'danger',
-              title: 'Erro!',
-              message: 'Despesa não cadastrada',
-              position: 'top-right',
-              duration: 5000
+              type: "danger",
+              title: "Erro!",
+              message: "Erro ao atualizar a despesa.",
+              position: "top-right",
+              duration: 5000,
             });
           } else {
             FlickerAlerts.showAlert({
-              type: 'success',
-              title: 'Sucesso!',
-              message: 'Despesa cadastrada com sucesso!',
-              duration: 3000
+              type: "success",
+              title: "Sucesso!",
+              message: "Despesa atualizada com sucesso",
+              position: "top-right",
+              duration: 5000,
             });
-            setFormData({ categoria: '', descricao: '', mes: '', ano: '', dataPagamento: '', valor: '' });
+            navigate("/extratodespesa");
           }
         } catch (error) {
-          console.error(error);
+          console.log("Erro na requisição PATCH:", error);
           FlickerAlerts.showAlert({
-            type: 'danger',
-            title: 'Erro!',
-            message: 'Erro ao cadastrar despesa. Tente novamente.',
-            position: 'top-right',
-            duration: 5000
+            type: "danger",
+            title: "Erro!",
+            message: "Ocorreu um erro ao atualizar. Tente novamente.",
+            position: "top-right",
+            duration: 5000,
           });
         }
       },
@@ -82,8 +98,7 @@ function Despesa() {
     const currentTime = new Date().getTime();
 
     if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('tokenExpiration');
+      sessionStorage.clear();
       navigate('/');
     }
   }, [navigate]);
@@ -91,7 +106,7 @@ function Despesa() {
   return (
     <>
       <Header />
-      <h1 className={styles.title}> Cadastrar despesas</h1>
+      <h1 className={styles.title}>Editar despesa</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.label}>Categoria</label>
@@ -103,22 +118,23 @@ function Despesa() {
             required
           >
             <option value="">SELECIONE</option>
-            <option value="Custas Judiciais">Custas Judiciais</option>
-            <option value="Honorários Advogado">Honorários Advogado</option>
-            <option value="Contribuições">Contribuições</option>
-            <option value="Custas">Custas</option>
+            {despesas.map((despesa) => (
+              <option key={despesa._id} value={despesa.categoria}>{despesa.categoria}</option>
+            ))}
           </select>
         </div>
 
+
         <div className={styles.formGroup}>
           <label className={styles.label}>Descrição</label>
-          <textarea
+          <input
             className={styles.inputField}
+            type="text"
             name="descricao"
             value={formData.descricao}
             onChange={handleChange}
             required
-          ></textarea>
+          />
         </div>
 
         <div className={styles.formGroup}>
@@ -156,18 +172,9 @@ function Despesa() {
             required
           >
             <option value="">SELECIONE</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="2029">2029</option>
-            <option value="2030">2030</option>
-            <option value="2031">2031</option>
-            <option value="2032">2032</option>
-            <option value="2033">2033</option>
-            <option value="2034">2034</option>
-            <option value="2035">2035</option>
+            {Array.from({ length: 11 }, (_, i) => (
+              <option key={2024 + i} value={2024 + i}>{2024 + i}</option>
+            ))}
           </select>
         </div>
 
@@ -201,4 +208,4 @@ function Despesa() {
   );
 }
 
-export default Despesa;
+export default Updatedespesas;

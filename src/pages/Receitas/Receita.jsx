@@ -92,7 +92,7 @@ function Receita() {
   return (
     <>
       <Header />
-      <h1 className={styles.title}>Receita</h1>
+      <h1 className={styles.title}>Cadastrar receita</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.label}>Nome</label>

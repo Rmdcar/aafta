@@ -37,10 +37,12 @@ h2 {
     padding: 10px 20px;
     border-radius: 5px;
     transition: background-color 0.3s;
+    
 }
 
 .menuItem a:hover {
     background-color: #0056b3;
+    
 }
 
 .tableContainer {
@@ -51,18 +53,19 @@ h2 {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+   
 }
 
 .userTable th, .userTable td {
     border: 1px solid #ddd;
     padding: 12px;
-    text-align: left;
+    
 }
 
 .userTable th {
     background-color: #e9ecef;
     color: rgb(23, 25, 179);
-    text-align: center;
+
 }
 
 .userTable tr:nth-child(even) {
@@ -74,7 +77,6 @@ h2 {
 }
 
 .actions {
-    display: flex;
     gap: 10px;
 }
 

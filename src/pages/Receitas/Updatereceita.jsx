@@ -1,67 +1,82 @@
 import Header from '../../components/Header.jsx';
 import Api from '../../services/Api.js';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from "react";
 import { FlickerAlerts, FlickerModals } from 'flicker-alerts';
-import styles from "./styles.module.css";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import styles from './styles.module.css';
 
-function Despesa() {
+function Updatereceita() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const receita = location.state.receita;
 
-  // Estado para armazenar os dados do formulário
   const [formData, setFormData] = useState({
-    categoria: '',
-    descricao: '',
-    mes: '',
-    ano: '',
-    dataPagamento: '',
-    valor: ''
+    name: receita.name,
+    mes: receita.mes,
+    ano: receita.ano,
+    dataRecebimento: receita.dataRecebimento.split('T')[0], // Se a data estiver em formato ISO
+    valor: receita.valor
   });
 
-  // Função para atualizar o estado com os valores do formulário
+  const [receitas, setReceitas] = useState([]);
+
+  useEffect(() => {
+    const fetchReceitas = async () => {
+      const token = sessionStorage.getItem('token');
+      try {
+        const response = await Api.get("/getallcontributions", { headers: { Authorization: `Bearer ${token}` } });
+        setReceitas(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar receitas:", error);
+      }
+    };
+
+    fetchReceitas();
+  }, []);
+
   const handleChange = (ev) => {
     const { name, value } = ev.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData((prevData) => ({ 
+        ...prevData, 
+        [name]: value 
+    }));
   };
 
-  // Função para tratar o envio do formulário
-  const handleSubmit = async (ev) => {
+  const handleSubmit = (ev) => {
     ev.preventDefault();
     FlickerModals.showModal({
-      type: 'warning',
+      type: 'confirm',
       title: 'Confirmação',
-      message: 'Deseja realmente cadastrar esta despesa?',
+      message: 'Deseja realmente atualizar esta receita?',
       onConfirm: async () => {
         try {
-          const res = await Api.post('/newexpense', formData);
+          const res = await Api.patch(`/updatecontribution/${receita._id}`, formData); // Use o ID da receita da URL
           if (res.data.error) {
             FlickerAlerts.showAlert({
-              type: 'danger',
-              title: 'Erro!',
-              message: 'Despesa não cadastrada',
-              position: 'top-right',
-              duration: 5000
+              type: "danger",
+              title: "Erro!",
+              message: "Erro ao atualizar a receita.",
+              position: "top-right",
+              duration: 5000,
             });
           } else {
             FlickerAlerts.showAlert({
-              type: 'success',
-              title: 'Sucesso!',
-              message: 'Despesa cadastrada com sucesso!',
-              duration: 3000
+              type: "success",
+              title: "Sucesso!",
+              message: "Receita atualizada com sucesso",
+              position: "top-right",
+              duration: 5000,
             });
-            setFormData({ categoria: '', descricao: '', mes: '', ano: '', dataPagamento: '', valor: '' });
+            navigate("/extratoreceita");
           }
         } catch (error) {
-          console.error(error);
+          console.log("Erro na requisição PATCH:", error);
           FlickerAlerts.showAlert({
-            type: 'danger',
-            title: 'Erro!',
-            message: 'Erro ao cadastrar despesa. Tente novamente.',
-            position: 'top-right',
-            duration: 5000
+            type: "danger",
+            title: "Erro!",
+            message: "Ocorreu um erro ao atualizar. Tente novamente.",
+            position: "top-right",
+            duration: 5000,
           });
         }
       },
@@ -82,8 +97,7 @@ function Despesa() {
     const currentTime = new Date().getTime();
 
     if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('tokenExpiration');
+      sessionStorage.clear();
       navigate('/');
     }
   }, [navigate]);
@@ -91,34 +105,22 @@ function Despesa() {
   return (
     <>
       <Header />
-      <h1 className={styles.title}> Cadastrar despesas</h1>
+      <h1 className={styles.title}>Editar receita</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
-          <label className={styles.label}>Categoria</label>
+          <label className={styles.label}>Nome</label>
           <select
             className={styles.inputField}
-            name="categoria"
-            value={formData.categoria}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
           >
             <option value="">SELECIONE</option>
-            <option value="Custas Judiciais">Custas Judiciais</option>
-            <option value="Honorários Advogado">Honorários Advogado</option>
-            <option value="Contribuições">Contribuições</option>
-            <option value="Custas">Custas</option>
+            {receitas.map((receita) => (
+              <option key={receita._id} value={receita.name}>{receita.name}</option>
+            ))}
           </select>
-        </div>
-
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Descrição</label>
-          <textarea
-            className={styles.inputField}
-            name="descricao"
-            value={formData.descricao}
-            onChange={handleChange}
-            required
-          ></textarea>
         </div>
 
         <div className={styles.formGroup}>
@@ -156,28 +158,19 @@ function Despesa() {
             required
           >
             <option value="">SELECIONE</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="2029">2029</option>
-            <option value="2030">2030</option>
-            <option value="2031">2031</option>
-            <option value="2032">2032</option>
-            <option value="2033">2033</option>
-            <option value="2034">2034</option>
-            <option value="2035">2035</option>
+            {Array.from({ length: 11 }, (_, i) => (
+              <option key={2024 + i} value={2024 + i}>{2024 + i}</option>
+            ))}
           </select>
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>Data de pagamento</label>
+          <label className={styles.label}>Data de recebimento</label>
           <input
             className={styles.inputField}
             type="date"
-            name="dataPagamento"
-            value={formData.dataPagamento}
+            name="dataRecebimento"
+            value = {formData.dataRecebimento}
             onChange={handleChange}
             required
           />
@@ -201,4 +194,4 @@ function Despesa() {
   );
 }
 
-export default Despesa;
+export default Updatereceita;

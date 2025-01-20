@@ -9,6 +9,9 @@ import Erro from "./pages/Erro/Erro";
 import UsuariosCadastrados from "./pages/Cadastro/UsuariosCadastrados"
 import UpdateUser from "./pages/Cadastro/UpdateUser"
 import Receitaextrato from "./pages/Receitas/Receitas-extrato";
+import Updatereceita from "./pages/Receitas/Updatereceita";
+import Despesaextrato from "./pages/Despesas/Despesas-extrato"
+import Updatedespesas from "./pages/Despesas/Updatedespesas";
 
 const router = createBrowserRouter([
   {
@@ -32,8 +35,20 @@ const router = createBrowserRouter([
     element: <Receitaextrato />,
   },
   {
+    path: "/updatereceita/:id",
+    element: <Updatereceita />,
+  },
+  {
     path: "/despesa",
     element: <Despesa />,
+  },
+  {
+    path: "/extratodespesa",
+    element: <Despesaextrato />,
+  },
+  {
+    path: "/updatedespesa/:id",
+    element: <Updatedespesas />,
   },
   {
     path: "/extrato",

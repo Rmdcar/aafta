@@ -5,29 +5,28 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './styles.module.css';
 
-function Receitaextrato() {
+function Despesaextrato() {
   const navigate = useNavigate();
 
 
-
-  const [receitas, setReceitas] = useState([]);
+  const [despesas, setDespesas] = useState([]);
 
   useEffect(() => {
     const token = sessionStorage.getItem('token'); // Obtenha o token aqui
-    Api.get("/getallcontributions", { headers: { Authorization: `Bearer ${token}` } })
-      .then((response) => setReceitas(response.data))
-      .catch(() => console.error("Erro ao buscar receitas."));
+    Api.get("/getallexpenses", { headers: { Authorization: `Bearer ${token}` } })
+      .then((response) => setDespesas(response.data))
+      .catch(() => console.error("Erro ao buscar despesas."));
   }, []);
 
 
 
-  const fetchReceitas = async () => {
+  const fetchDespesas = async () => {
     const token = sessionStorage.getItem('token'); // Obtenha o token aqui
     try {
-      const response = await Api.get("/getallcontributions", { headers: { Authorization: `Bearer ${token}` } });
-      setReceitas(response.data);
+      const response = await Api.get("/getallexpenses", { headers: { Authorization: `Bearer ${token}` } });
+      setDespesas(response.data);
     } catch (error) {
-      console.error("Erro ao buscar receitas:", error);
+      console.error("Erro ao buscar despesas:", error);
     }
   };
 
@@ -35,24 +34,24 @@ function Receitaextrato() {
     FlickerModals.showModal({
       type: 'warning',
       title: 'Confirmação',
-      message: 'Deseja realmente excluir esta receita?',
+      message: 'Deseja realmente excluir esta despesas?',
       onConfirm: async () => {
         const token = sessionStorage.getItem('token'); // Obtenha o token aqui
         try {
-          await Api.delete(`/deletecontribution/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+          await Api.delete(`/deleteexpense/${id}`, { headers: { Authorization: `Bearer ${token}` } });
           FlickerAlerts.showAlert({
             type: 'success',
             title: 'Sucesso!',
-            message: 'Receita excluída com sucesso!',
+            message: 'Respesa excluída com sucesso!',
             duration: 3000
           });
-          fetchReceitas(); // Recarregar as receitas após a exclusão
+          fetchDespesas(); // Recarregar as despesas após a exclusão
         } catch (error) {
-          console.error("Erro ao excluir receita:", error);
+          console.error("Erro ao excluir despesas:", error);
           FlickerAlerts.showAlert({
             type: 'danger',
             title: 'Erro!',
-            message: 'Erro ao excluir receita. Tente novamente.',
+            message: 'Erro ao excluir despesas. Tente novamente.',
             position: 'top-right',
             duration: 5000
           });
@@ -69,8 +68,8 @@ function Receitaextrato() {
     });
   };
 
-  const handleEdit = (receita) => {
-    navigate(`/updatereceita/${receita._id}`, { state: { receita } }); // Passa os dados 
+  const handleEdit = (despesa) => {
+    navigate(`/updatedespesa/${despesa._id}`, { state: { despesa } }); // Passa os dados 
   };
 
   useEffect(() => {
@@ -90,40 +89,42 @@ function Receitaextrato() {
       <div className={styles.container}>
         <div className={styles.menu}>
           <h2 className={styles.menuItem}>
-            <Link to="/extratoreceita">Todas receitas</Link>
+            <Link to="/extratodespesa">Todas despesas</Link>
           </h2>
           <h2 className={styles.menuItem}>
-            <Link to="/receita">Cadastrar nova</Link>
+            <Link to="/despesa">Cadastrar nova</Link>
           </h2>
         </div>
         <div className={styles.tableContainer}>
           <table className={styles.userTable}>
             <thead>
               <tr>
-                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Descrição</th>
                 <th>Competência</th>
-                <th>Data de recebimento</th>
+                <th>Data de pagamento</th>
                 <th>Valor</th>
                 <th>Ações</th>
               </tr>
             </thead>
             <tbody>
-              {receitas.map((receita) => (
-                <tr key={receita._id}> {/* Usando _id como chave */}
-                  <td>{receita.name}</td>
-                  <td>{receita.mes}/{receita.ano}</td>
-                  <td>{new Date(receita.dataRecebimento).toLocaleDateString('pt-BR')}</td>
-                  <td>{receita.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+              {despesas.map((despesa) => (
+                <tr key={despesa._id}> {/* Usando _id como chave */}
+                  <td>{despesa.categoria}</td>
+                  <td>{despesa.descricao}</td>
+                  <td>{despesa.mes}/{despesa.ano}</td>
+                  <td>{new Date(despesa.dataPagamento).toLocaleDateString('pt-BR')}</td>
+                  <td>{despesa.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className={styles.actions}>
                     <button 
                       className={styles.editButton}
-                      onClick={() => handleEdit(receita)} // Lógica de edição deve ser implementada
+                      onClick={() => handleEdit(despesa)} // Lógica de edição deve ser implementada
                     >
                       Editar
                     </button>
                     <button 
                       className={styles.deleteButton}
-                      onClick={() => handleDelete(receita._id)} // Passa o ID da receita
+                      onClick={() => handleDelete(despesa._id)} // Passa o ID da despesas
                     >
                       Excluir
                     </button>
@@ -138,4 +139,4 @@ function Receitaextrato() {
   );
 }
 
-export default Receitaextrato;
+export default Despesaextrato;
