@@ -37,7 +37,7 @@ function Home() {
         const receitasTotal = contributionsRes.data.reduce((acc, contribution) => acc + parseFloat(contribution.valor), 0);
         const despesasTotal = expensesRes.data.reduce((acc, expense) => acc + parseFloat(expense.valor), 0);
         const saldoTotal = receitasTotal - despesasTotal;
-        const totalMembros = usersRes.data.length;
+        const totalMembros = usersRes.data.length -2 ;
 
         setReceitas(receitasTotal);
         setDespesas(despesasTotal);

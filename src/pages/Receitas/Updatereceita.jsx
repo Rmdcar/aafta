@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './styles.module.css';
 
-function Updatereceita() {
+function UpdateReceita() {
   const navigate = useNavigate();
   const location = useLocation();
   const receita = location.state.receita;
@@ -14,32 +14,27 @@ function Updatereceita() {
     name: receita.name,
     mes: receita.mes,
     ano: receita.ano,
-    dataRecebimento: receita.dataRecebimento.split('T')[0], // Se a data estiver em formato ISO
-    valor: receita.valor
+    dataRecebimento: receita.dataRecebimento.split('T')[0],
+    valor: receita.valor,
+    userId: receita.user // Inclui o userId no estado inicial
   });
 
-  const [receitas, setReceitas] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const fetchReceitas = async () => {
-      const token = sessionStorage.getItem('token');
-      try {
-        const response = await Api.get("/getallcontributions", { headers: { Authorization: `Bearer ${token}` } });
-        setReceitas(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar receitas:", error);
-      }
-    };
-
-    fetchReceitas();
+    Api.get("/getAllUsers")
+      .then((response) => setUsers(response.data))
+      .catch(() => console.error("Erro ao buscar usuários."));
   }, []);
 
   const handleChange = (ev) => {
     const { name, value } = ev.target;
-    setFormData((prevData) => ({ 
-        ...prevData, 
-        [name]: value 
-    }));
+    if (name === 'name') {
+      const selectedUser = users.find(user => user.name === value);
+      setFormData((prevData) => ({ ...prevData, name: value, userId: selectedUser._id }));
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const handleSubmit = (ev) => {
@@ -50,7 +45,7 @@ function Updatereceita() {
       message: 'Deseja realmente atualizar esta receita?',
       onConfirm: async () => {
         try {
-          const res = await Api.patch(`/updatecontribution/${receita._id}`, formData); // Use o ID da receita da URL
+          const res = await Api.patch(`/updatecontribution/${receita._id}`, formData);
           if (res.data.error) {
             FlickerAlerts.showAlert({
               type: "danger",
@@ -115,10 +110,11 @@ function Updatereceita() {
             value={formData.name}
             onChange={handleChange}
             required
+            disabled
           >
             <option value="">SELECIONE</option>
-            {receitas.map((receita) => (
-              <option key={receita._id} value={receita.name}>{receita.name}</option>
+            {users.map((user) => (
+              <option key={user._id} value={user.name}>{user.name}</option>
             ))}
           </select>
         </div>
@@ -147,7 +143,6 @@ function Updatereceita() {
             <option value="12">Dezembro</option>
           </select>
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Ano</label>
           <select
@@ -194,4 +189,4 @@ function Updatereceita() {
   );
 }
 
-export default Updatereceita;
+export default UpdateReceita;

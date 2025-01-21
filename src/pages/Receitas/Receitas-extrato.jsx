@@ -7,22 +7,18 @@ import styles from './styles.module.css';
 
 function Receitaextrato() {
   const navigate = useNavigate();
-
-
-
   const [receitas, setReceitas] = useState([]);
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token'); // Obtenha o token aqui
+    const token = sessionStorage.getItem('token');
     Api.get("/getallcontributions", { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => setReceitas(response.data))
       .catch(() => console.error("Erro ao buscar receitas."));
   }, []);
 
-
-
   const fetchReceitas = async () => {
-    const token = sessionStorage.getItem('token'); // Obtenha o token aqui
+    const token = sessionStorage.getItem('token');
     try {
       const response = await Api.get("/getallcontributions", { headers: { Authorization: `Bearer ${token}` } });
       setReceitas(response.data);
@@ -37,7 +33,7 @@ function Receitaextrato() {
       title: 'Confirmação',
       message: 'Deseja realmente excluir esta receita?',
       onConfirm: async () => {
-        const token = sessionStorage.getItem('token'); // Obtenha o token aqui
+        const token = sessionStorage.getItem('token');
         try {
           await Api.delete(`/deletecontribution/${id}`, { headers: { Authorization: `Bearer ${token}` } });
           FlickerAlerts.showAlert({
@@ -46,7 +42,7 @@ function Receitaextrato() {
             message: 'Receita excluída com sucesso!',
             duration: 3000
           });
-          fetchReceitas(); // Recarregar as receitas após a exclusão
+          fetchReceitas();
         } catch (error) {
           console.error("Erro ao excluir receita:", error);
           FlickerAlerts.showAlert({
@@ -70,7 +66,7 @@ function Receitaextrato() {
   };
 
   const handleEdit = (receita) => {
-    navigate(`/updatereceita/${receita._id}`, { state: { receita } }); // Passa os dados 
+    navigate(`/updatereceita/${receita._id}`, { state: { receita } });
   };
 
   useEffect(() => {
@@ -83,6 +79,16 @@ function Receitaextrato() {
       navigate('/');
     }
   }, [navigate]);
+
+  const handleFilterChange = (ev) => {
+    setFilter(ev.target.value);
+  };
+
+  // Ordena as receitas pela data de recebimento (do mais antigo para o mais novo)
+  const sortedReceitas = receitas.sort((a, b) => new Date(a.dataRecebimento) - new Date(b.dataRecebimento));
+
+  // Filtra as receitas com base no texto digitado
+  const filteredReceitas = sortedReceitas.filter(receita => receita.name.toLowerCase().includes(filter.toLowerCase()));
 
   return (
     <>
@@ -97,6 +103,16 @@ function Receitaextrato() {
           </h2>
         </div>
         <div className={styles.tableContainer}>
+          <div className={styles.filterContainer}>
+            <label className={styles.filterLabel}>Filtrar por Nome:</label>
+            <input 
+              type="text" 
+              value={filter} 
+              onChange={handleFilterChange} 
+              className={styles.filterInput} 
+              placeholder="Digite para filtrar"
+            />
+          </div>
           <table className={styles.userTable}>
             <thead>
               <tr>
@@ -108,8 +124,8 @@ function Receitaextrato() {
               </tr>
             </thead>
             <tbody>
-              {receitas.map((receita) => (
-                <tr key={receita._id}> {/* Usando _id como chave */}
+              {filteredReceitas.map((receita) => (
+                <tr key={receita._id}>
                   <td>{receita.name}</td>
                   <td>{receita.mes}/{receita.ano}</td>
                   <td>{new Date(receita.dataRecebimento).toLocaleDateString('pt-BR')}</td>
@@ -117,13 +133,13 @@ function Receitaextrato() {
                   <td className={styles.actions}>
                     <button 
                       className={styles.editButton}
-                      onClick={() => handleEdit(receita)} // Lógica de edição deve ser implementada
+                      onClick={() => handleEdit(receita)}
                     >
                       Editar
                     </button>
                     <button 
                       className={styles.deleteButton}
-                      onClick={() => handleDelete(receita._id)} // Passa o ID da receita
+                      onClick={() => handleDelete(receita._id)}
                     >
                       Excluir
                     </button>

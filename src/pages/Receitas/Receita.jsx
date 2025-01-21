@@ -13,7 +13,8 @@ function Receita() {
     mes: '',
     ano: '',
     dataRecebimento: '',
-    valor: ''
+    valor: '',
+    userId: ''
   });
 
   const [users, setUsers] = useState([]);
@@ -26,7 +27,12 @@ function Receita() {
 
   const handleChange = (ev) => {
     const { name, value } = ev.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === 'name') {
+      const selectedUser = users.find(user => user.name === value);
+      setFormData((prevData) => ({ ...prevData, name: value, userId: selectedUser._id }));
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const handleSubmit = (ev) => {
@@ -38,7 +44,8 @@ function Receita() {
       onConfirm: async () => {
         try {
           const res = await Api.post('/newcontribution', formData);
-          
+          console.log(formData)
+
           if (res.data.error) {
             FlickerAlerts.showAlert({
               type: 'danger',
@@ -54,7 +61,7 @@ function Receita() {
               message: 'Receita cadastrada com sucesso!',
               duration: 3000
             });
-            setFormData({ name: '', mes: '', ano: '', dataRecebimento: '', valor: '' });
+            setFormData({ name: '', mes: '', ano: '', dataRecebimento: '', valor: '', userId: '' });
           }
         } catch (error) {
           console.error(error);
@@ -105,7 +112,7 @@ function Receita() {
           >
             <option value="">SELECIONE</option>
             {users.map((user) => (
-              <option key={user.id} value={user.name}>{user.name}</option>
+              <option key={user._id} value={user.name}>{user.name}</option>
             ))}
           </select>
         </div>
