@@ -17,9 +17,9 @@ const UsuariosCadastrados = () => {
         message: 'Deseja realmente excluir este usuário?',
         onConfirm: async () => {
           try {
-            const res = await Api.delete(`/deleteUser/${userId}`); // Passa o ID do usuário na URL
+            const res = await Api.delete(`/deleteUser/${userId}`);
             if (res.data.erro) {
-              console.log(res.data.erro); // Exibe a mensagem de erro, se houver
+              console.log(res.data.erro);
             } else {
               FlickerAlerts.showAlert({
                 type: 'success',
@@ -27,11 +27,16 @@ const UsuariosCadastrados = () => {
                 message: 'Usuário deletado com sucesso!',
                 duration: 3000
               });
-              // Atualiza a lista de usuários após a exclusão
-              setUsers(users.filter(user => user._id !== userId)); // Filtro pelo campo _id
+              setUsers(users.filter(user => user._id !== userId));
             }
           } catch (error) {
             console.error('Erro ao deletar:', error);
+            FlickerAlerts.showAlert({
+              type: 'error',
+              title: 'Erro!',
+              message: 'Ocorreu um erro ao deletar o usuário.',
+              duration: 3000
+            });
           }
         },
         onCancel: () => {
@@ -49,18 +54,38 @@ const UsuariosCadastrados = () => {
   };
 
   const handleEdit = (user) => {
-    navigate(`/updateuser/${user._id}`, { state: { user } }); // Passa os dados do usuário
+    navigate(`/updateuser/${user._id}`, { state: { user } });
   };
 
   useEffect(() => {
-    Api.get("/getAllUsers")
-      .then((response) => {
+    const fetchUsers = async () => {
+      const token = sessionStorage.getItem("token");
+      const tokenExpiration = sessionStorage.getItem("tokenExpiration");
+      const currentTime = new Date().getTime();
+
+      if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("tokenExpiration");
+        navigate("/");
+        return;
+      }
+
+      try {
+        const response = await Api.get("/getAllUsers");
         setUsers(response.data);
-      })
-      .catch(() => {
-        console.error("Erro ao buscar usuários.");
-      });
-  }, []);
+      } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+        FlickerAlerts.showAlert({
+          type: 'error',
+          title: 'Erro!',
+          message: 'Ocorreu um erro ao buscar os usuários.',
+          duration: 3000
+        });
+      }
+    };
+
+    fetchUsers();
+  }, [navigate]);
 
   return (
     <>
@@ -85,19 +110,19 @@ const UsuariosCadastrados = () => {
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user._id}> {/* Usando _id como chave */}
+                <tr key={user._id}>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td className={styles.actions}>
                     <button 
                       className={styles.editButton}
-                      onClick={() => handleEdit(user)} // Passa o usuário
+                      onClick={() => handleEdit(user)}
                     >
                       Editar
                     </button>
                     <button 
                       className={styles.deleteButton}
-                      onClick={() => handleDelete(user._id)} // Passa o ID do usuário
+                      onClick={() => handleDelete(user._id)}
                     >
                       Excluir
                     </button>
