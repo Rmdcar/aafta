@@ -8,6 +8,7 @@ function Extrato() {
   const navigate = useNavigate();
   const [combinedData, setCombinedData] = useState([]);
   const [saldo, setSaldo] = useState(0);
+  const [loading, setLoading] = useState(true); // Estado de carregamento
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -60,6 +61,8 @@ function Extrato() {
         setSaldo(saldoCalculado);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
+      } finally {
+        setLoading(false); // Define loading como false após a requisição
       }
     };
 
@@ -70,32 +73,36 @@ function Extrato() {
     <>
       <Header />
       <h1 className={styles.title}>Extrato</h1>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Tipo</th>
-            <th>Nome</th>
-            <th>Competência</th>
-            <th>Data</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          {combinedData.map((item, index) => (
-            <tr key={index}>
-              <td>{item.tipo}</td>
-              <td>{item.tipo === 'Despesa' ? `${item.categoria} - ${item.descricao}` : item.name}</td>
-              <td>{item.mes}/{item.ano}</td>
-              <td>{item.dataRecebimento ? item.dataRecebimento.toLocaleDateString('pt-BR') : item.dataPagamento.toLocaleDateString('pt-BR')}</td>
-              <td>{item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+      {loading ? ( // Exibe a mensagem de carregamento
+        <p>Carregando...</p>
+      ) : (
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Nome</th>
+              <th>Competência</th>
+              <th>Data</th>
+              <th>Valor</th>
             </tr>
-          ))}
-          <tr className={styles.saldoRow}>
-            <td colSpan="4" className={styles.saldoLabel}>Saldo</td>
-            <td className={styles.saldoValue}>{saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-          </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {combinedData.map((item, index) => (
+              <tr key={index}>
+                <td>{item.tipo}</td>
+                <td>{item.tipo === 'Despesa' ? `${item.categoria} - ${item.descricao}` : item.name}</td>
+                <td>{item.mes}/{item.ano}</td>
+                <td>{item.dataRecebimento ? item.dataRecebimento.toLocaleDateString('pt-BR') : item.dataPagamento.toLocaleDateString('pt-BR')}</td>
+                <td>{item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+              </tr>
+            ))}
+            <tr className={styles.saldoRow}>
+              <td colSpan="4" className={styles.saldoLabel}>Saldo</td>
+              <td className={styles.saldoValue}>{saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            </tr>
+          </tbody>
+        </table>
+      )}
     </>
   );
 }

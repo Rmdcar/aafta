@@ -54,6 +54,8 @@ function ExtratoUsuario() {
         });
 
         setReceitas(response.data.data);
+        
+        
       } catch (error) {
         console.error("Erro ao buscar receitas:", error);
         const errorMessage = error.response?.data?.message || "Erro ao buscar receitas. Tente novamente.";
@@ -167,7 +169,7 @@ function ExtratoUsuario() {
       <div className={styles.container}>
         <h1 className={styles.title}>Extrato do Usuário</h1>
         <p className={styles.userName}>
-          {receitas.length > 0 ? receitas[0].name : "Nome não disponível"}
+          {receitas.length > 0 ? receitas[0].name : ''}
         </p>
 
         <p className={styles.subtitle}>

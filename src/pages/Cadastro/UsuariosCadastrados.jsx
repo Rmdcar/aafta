@@ -7,6 +7,7 @@ import { FlickerAlerts, FlickerModals } from 'flicker-alerts';
 
 const UsuariosCadastrados = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado de carregamento
   const navigate = useNavigate(); 
 
   const handleDelete = async (userId) => {
@@ -70,6 +71,7 @@ const UsuariosCadastrados = () => {
         return;
       }
 
+      setLoading(true); // Define loading como true antes da requisição
       try {
         const response = await Api.get("/getAllUsers");
         setUsers(response.data);
@@ -81,6 +83,8 @@ const UsuariosCadastrados = () => {
           message: 'Ocorreu um erro ao buscar os usuários.',
           duration: 3000
         });
+      } finally {
+        setLoading(false); // Define loading como false após a requisição
       }
     };
 
@@ -100,37 +104,41 @@ const UsuariosCadastrados = () => {
           </h2>
         </div>
         <div className={styles.tableContainer}>
-          <table className={styles.userTable}>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user._id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td className={styles.actions}>
-                    <button 
-                      className={styles.editButton}
-                      onClick={() => handleEdit(user)}
-                    >
-                      Editar
-                    </button>
-                    <button 
-                      className={styles.deleteButton}
-                      onClick={() => handleDelete(user._id)}
-                    >
-                      Excluir
-                    </button>
-                  </td>
+          {loading ? ( // Exibe a mensagem de carregamento
+            <p>Carregando...</p>
+          ) : (
+            <table className={styles.userTable}>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Email</th>
+                  <th>Ações</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td className={styles.actions}>
+                      <button 
+                        className={styles.editButton}
+                        onClick={() => handleEdit(user)}
+                      >
+                        Editar
+                      </button>
+                      <button 
+                        className={styles.deleteButton}
+                        onClick={() => handleDelete(user._id)}
+                      >
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </>
