@@ -15,7 +15,7 @@ function Home() {
     const token = localStorage.getItem('token');
     const tokenExpiration = localStorage.getItem('tokenExpiration');
     const currentTime = new Date().getTime();
-    console.log(token)
+    
     
 
     if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {

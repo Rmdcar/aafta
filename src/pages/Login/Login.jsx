@@ -41,7 +41,7 @@ function Login() {
         localStorage.setItem('usuario', res.data.usuario);
         const expirationTime = new Date().getTime() + 1000 * 60 * 30; // 30 minutos
         localStorage.setItem('tokenExpiration', expirationTime);
-        alert(expirationTime)
+        
         
         navigate('/home');
         FlickerAlerts.showAlert({
