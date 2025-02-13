@@ -23,7 +23,7 @@ function Updatedespesas() {
 
   useEffect(() => {
     const fetchDespesas = async () => {
-      const token = sessionStorage.getItem('token');
+      const token = localStorage.getItem('token');
       try {
         const response = await Api.get("/getallexpenses", { headers: { Authorization: `Bearer ${token}` } });
         setDespesas(response.data); // Corrigido para setDespesas
@@ -93,12 +93,12 @@ function Updatedespesas() {
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+    const token = localStorage.getItem('token');
+    const tokenExpiration = localStorage.getItem('tokenExpiration');
     const currentTime = new Date().getTime();
 
     if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
-      sessionStorage.clear();
+      localStorage.clear();
       navigate('/');
     }
   }, [navigate]);

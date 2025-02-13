@@ -37,10 +37,12 @@ function Login() {
           duration: 5000,
         });
       } else {
-        sessionStorage.setItem('token', res.data.token);
-        sessionStorage.setItem('usuario', res.data.usuario);
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('usuario', res.data.usuario);
         const expirationTime = new Date().getTime() + 1000 * 60 * 30; // 30 minutos
-        sessionStorage.setItem('tokenExpiration', expirationTime);
+        localStorage.setItem('tokenExpiration', expirationTime);
+        alert(expirationTime)
+        
         navigate('/home');
         FlickerAlerts.showAlert({
           type: "success",

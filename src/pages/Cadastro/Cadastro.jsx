@@ -59,13 +59,13 @@ function Cadastro() {
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    const tokenExpiration = sessionStorage.getItem("tokenExpiration");
+    const token = localStorage.getItem("token");
+    const tokenExpiration = localStorage.getItem("tokenExpiration");
     const currentTime = new Date().getTime();
 
     if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("tokenExpiration");
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiration");
       navigate("/");
     }
   }, [navigate]);

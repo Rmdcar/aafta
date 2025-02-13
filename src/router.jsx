@@ -12,6 +12,10 @@ import Receitaextrato from "./pages/Receitas/Receitas-extrato";
 import Updatereceita from "./pages/Receitas/Updatereceita";
 import Despesaextrato from "./pages/Despesas/Despesas-extrato"
 import Updatedespesas from "./pages/Despesas/Updatedespesas";
+import HomeExtratos from "./pages/Extrato/HomeExtratos";
+import ExtratoUser from "./pages/Extrato/ExtratoUser";
+import ExtratoUsuario from "./pages/Extrato/Extratousuario";
+
 
 const router = createBrowserRouter([
   {
@@ -51,9 +55,20 @@ const router = createBrowserRouter([
     element: <Updatedespesas />,
   },
   {
-    path: "/extrato",
+    path: "/homeextratos",
+    element: <HomeExtratos/>
+  },
+  {
+    path: "/extratofinanceiro",
     element: <Extrato />,
   },
+  {path: "/extratousuario",
+  element: <ExtratoUser />,
+},
+{
+  path: "/extratousuario/:id",
+  element:<ExtratoUsuario />
+},
   // Redireciona rotas inexistentes explicitamente
   {
     path: "*",

@@ -12,7 +12,7 @@ const Api = axios.create({
 // Interceptor para adicionar o token no cabeçalho de todas as requisições
 Api.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("token"); // Recupera o token do sessionStorage
+    const token = localStorage.getItem("token"); // Recupera o token do localStorage
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; // Adiciona o token no cabeçalho
     }

@@ -4,6 +4,8 @@ import { FlickerAlerts, FlickerModals } from 'flicker-alerts';
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './styles.module.css';
+import { format  } from "date-fns"; // Importações do date-fns
+import { ptBR } from "date-fns/locale"; // Localização para português do Brasil
 
 function Receitaextrato() {
   const navigate = useNavigate();
@@ -11,14 +13,14 @@ function Receitaextrato() {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     Api.get("/getallcontributions", { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => setReceitas(response.data))
       .catch(() => console.error("Erro ao buscar receitas."));
   }, []);
 
   const fetchReceitas = async () => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     try {
       const response = await Api.get("/getallcontributions", { headers: { Authorization: `Bearer ${token}` } });
       setReceitas(response.data);
@@ -33,7 +35,7 @@ function Receitaextrato() {
       title: 'Confirmação',
       message: 'Deseja realmente excluir esta receita?',
       onConfirm: async () => {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         try {
           await Api.delete(`/deletecontribution/${id}`, { headers: { Authorization: `Bearer ${token}` } });
           FlickerAlerts.showAlert({
@@ -70,12 +72,12 @@ function Receitaextrato() {
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+    const token = localStorage.getItem('token');
+    const tokenExpiration = localStorage.getItem('tokenExpiration');
     const currentTime = new Date().getTime();
 
     if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
-      sessionStorage.clear();
+      localStorage.clear();
       navigate('/');
     }
   }, [navigate]);
@@ -89,6 +91,23 @@ function Receitaextrato() {
 
   // Filtra as receitas com base no texto digitado
   const filteredReceitas = sortedReceitas.filter(receita => receita.name.toLowerCase().includes(filter.toLowerCase()));
+
+
+    const parseDateAsLocal = (dateString) => {
+      const [year, month, day] = dateString.split("-");
+      return new Date(year, month - 1, day); // Mês é base 0 no JavaScript
+    };
+  
+    // Função para formatar a data no formato brasileiro (DD/MM/YYYY) usando date-fns
+    const formatarData = (data) => {
+      try {
+        const localDate = parseDateAsLocal(data.split("T")[0]); // Converte para data local
+        return format(localDate, "dd/MM/yyyy", { locale: ptBR });
+      } catch (error) {
+        console.error("Erro ao formatar data:", error);
+        return "Data inválida";
+      }
+    };
 
   return (
     <>
@@ -128,7 +147,7 @@ function Receitaextrato() {
                 <tr key={receita._id}>
                   <td>{receita.name}</td>
                   <td>{receita.mes}/{receita.ano}</td>
-                  <td>{new Date(receita.dataRecebimento).toLocaleDateString('pt-BR')}</td>
+                  <td>{formatarData(receita.dataRecebimento)}</td>
                   <td>{receita.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className={styles.actions}>
                     <button 

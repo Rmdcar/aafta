@@ -10,20 +10,20 @@ function Extrato() {
   const [saldo, setSaldo] = useState(0);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+    const token = localStorage.getItem('token');
+    const tokenExpiration = localStorage.getItem('tokenExpiration');
     const currentTime = new Date().getTime();
 
     if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('tokenExpiration');
+      localStorage.removeItem('token');
+      localStorage.removeItem('tokenExpiration');
       navigate('/');
     }
   }, [navigate]);
 
   useEffect(() => {
     const fetchContributionsAndExpenses = async () => {
-      const token = sessionStorage.getItem('token'); // Obtenha o token aqui
+      const token = localStorage.getItem('token'); // Obtenha o token aqui
 
       try {
         const [contributionsRes, expensesRes] = await Promise.all([

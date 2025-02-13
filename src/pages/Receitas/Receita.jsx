@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 function Receita() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+   const [formData, setFormData] = useState({
     name: '',
     mes: '',
     ano: '',
@@ -86,12 +86,12 @@ function Receita() {
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    const tokenExpiration = sessionStorage.getItem('tokenExpiration');
+    const token = localStorage.getItem('token');
+    const tokenExpiration = localStorage.getItem('tokenExpiration');
     const currentTime = new Date().getTime();
 
     if (!token || (tokenExpiration && currentTime > Number(tokenExpiration))) {
-      sessionStorage.clear();
+      localStorage.clear();
       navigate('/');
     }
   }, [navigate]);

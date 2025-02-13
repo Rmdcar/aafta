@@ -3,9 +3,9 @@ import { useState } from "react";
 import styles from "./styles.module.css";
 
 const handleLogout = (navigate) => {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("usuario");
-  sessionStorage.removeItem("tokenExpiration");
+  localStorage.removeItem("token");
+  localStorage.removeItem("usuario");
+  localStorage.removeItem("tokenExpiration");
   navigate("/");
 };
 
@@ -43,7 +43,7 @@ function Header() {
           <Link to="/extratodespesa">Despesas</Link>
         </div>
         <div className={styles.links}>
-          <Link to="/extrato">Extrato</Link>
+          <Link to="/homeextratos">Extratos</Link>
         </div>
         <div className={styles.links}>
           <Link to="/" onClick={() => handleLogout(navigate)}>
